@@ -36,9 +36,9 @@ PRINTF_INC		= $(shell ls $(PRINTF_INC_DIR))
 PRINTF_LIB		= $(PRINTF_DIR)/libftprintf.a
 
 # Compiler options
-CC				= cc
+CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror -pthread
-INCFLAGS		= -I $(INC_DIR) -I $(LIBFT_INC_DIR) -I $(PRINTF_INC_DIR)
+INCFLAGS		= -I$(INC_DIR)/ -I$(LIBFT_INC_DIR)/ -I$(PRINTF_INC_DIR)/
 
 # Bash commands
 RM				= rm -rf
@@ -54,28 +54,28 @@ INC_DEP			= $(addprefix $(INC_DIR)/, $(INC)) $(LIBFT_DEP) $(PRINTF_DEP)
 # Rules
 all: $(NAME)
 
-$(NAME): $(OBJ_DEP) $(INC_DEP)
-	@echo "$(BLUE)Building	$(PURPLE)$(NAME)$(NC)"
-	@make -C $(LIBFT_DIR)
-	@make -C $(PRINTF_DIR)
-	@$(CC) $(CFLAGS) $(LIBFLAGS) $(LIB_DEP) $(OBJ_DEP) -o $(NAME)
-	@echo "$(GREEN)Program $(PURPLE)($(NAME))$(GREEN) has been successfully generated!$(NC)"
-
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DEP)
 	@$(MKDIR) $(OBJ_DIR)
 	@echo "$(GREEN)Compiling	$(YELLOW)$(shell basename $<)$(NC)"
-	@$(CC) $(CFLAGS) $(INCFLAGS) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@
+
+$(NAME): $(OBJ_DEP) $(INC_DEP)
+	@echo "$(BLUE)Building	$(PURPLE)$(NAME)$(NC)"
+	@make --no-print-directory -C $(LIBFT_DIR)
+	@make --no-print-directory -C $(PRINTF_DIR)
+	@$(CC) $(CFLAGS) $(OBJ_DEP) $(LIB_DEP) -o $(NAME)
+	@echo "$(GREEN)Program $(PURPLE)($(NAME))$(GREEN) has been successfully generated!$(NC)"
 
 clean:
 	@echo "$(RED)Removing	$(PURPLE)$(PROJECT) $(YELLOW)*.o$(NC)"
-	@make clean -C $(LIBFT_DIR)
-	@make clean -C $(PRINTF_DIR)
+	@make clean --no-print-directory -C $(LIBFT_DIR)
+	@make clean --no-print-directory -C $(PRINTF_DIR)
 	@$(RM) $(OBJ_DIR)
 
 fclean: clean
 	@echo "$(RED)Removing	$(PURPLE)$(NAME)$(NC)"
-	@make fclean -C $(LIBFT_DIR)
-	@make fclean -C $(PRINTF_DIR)
+	@make fclean --no-print-directory -C $(LIBFT_DIR)
+	@make fclean --no-print-directory -C $(PRINTF_DIR)
 	@$(RM) $(NAME)
 
 re: fclean all
