@@ -3,6 +3,7 @@
 
 /* Libraries */
 # include <pthread.h>
+# include <sys/time.h>
 # include "libft.h"
 # include "ft_printf.h"
 
@@ -14,26 +15,45 @@
 2 = think
 */
 
-typedef struct s_philosopher {
-	int	id;
-	int	activity;
-}	t_philosopher;
+typedef struct s_args {
+	int	philos_count;
+	int	die_time;
+	int	eat_time;
+	int	sleep_time;
+	int	eat_amount;
+}	t_args;
 
 typedef struct s_fork {
-	int	id;
-	int used;
+	int	left;
+	int right;
 }	t_fork;
 
-typedef struct s_round {
-	t_philosopher 	*philos;
+typedef struct s_philo {
+	int			idx;
+	int			eat_count;
+	long long	time_to_die;
+	pthread_t	*thread;
+}	t_philo;
+
+typedef struct s_table {
+	t_args			args;
+	t_philo			*philos;
 	pthread_mutex_t	*forks;
-	int				philo_allocated;
-	int				fork_allocated;
-	int				philos_count;
-	int				die_time;
-	int				eat_time;
-	int 			sleep_time;
-	int				eat_count;
-}	t_round;
+	pthread_mutex_t	mutex;
+	long long		time0;
+}	t_table;
+
+/* main.c */
+
+/* time.c */
+long long	get_curtime(t_table tbl);
+long long	get_deltatime(long long time);
+long long	get_time(void);
+void		ft_usleep(long long time);
+
+/* philosopher.c */
+void	print_activity(t_table tbl, t_philo philo, const char *act);
+
+/* args.c */
 
 #endif
