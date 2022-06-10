@@ -2,8 +2,6 @@
 # define PHILOSOPHERS_H
 
 /* Libraries */
-# include <errno.h>
-# include <string.h>
 # include <pthread.h>
 # include "libft.h"
 # include "ft_printf.h"
@@ -27,13 +25,15 @@ typedef struct s_fork {
 }	t_fork;
 
 typedef struct s_round {
-	t_philosopher *philos;
-	int	philo_allocated;
-	int	philos_count;
-	int	die_time;
-	int	eat_time;
-	int sleep_time;
-	int eat_count;
+	t_philosopher 	*philos;
+	pthread_mutex_t	*forks;
+	int				philo_allocated;
+	int				fork_allocated;
+	int				philos_count;
+	int				die_time;
+	int				eat_time;
+	int 			sleep_time;
+	int				eat_count;
 }	t_round;
 
 #endif
