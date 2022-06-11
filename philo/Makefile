@@ -15,8 +15,6 @@ INC_DIR			= inc
 SRC_DIR			= src
 OBJ_DIR			= obj
 LIB_DIR			= lib
-PRINTF_DIR		= ft_printf
-LIBFT_DIR		= libft
 
 # Files
 PROJECT			= Philosophers
@@ -25,20 +23,10 @@ SRC				= $(shell ls $(SRC_DIR))
 OBJ				= $(SRC:.c=.o)
 INC				= $(shell ls $(INC_DIR))
 
-# Libft files
-LIBFT_INC_DIR	= $(LIBFT_DIR)/$(INC_DIR)
-LIBFT_INC		= $(shell ls $(LIBFT_INC_DIR))
-LIBFT_LIB		= $(LIBFT_DIR)/libft.a
-
-# Printf files
-PRINTF_INC_DIR	= $(PRINTF_DIR)/$(INC_DIR)
-PRINTF_INC		= $(shell ls $(PRINTF_INC_DIR))
-PRINTF_LIB		= $(PRINTF_DIR)/libftprintf.a
-
 # Compiler options
 CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror -pthread
-INCFLAGS		= -I$(INC_DIR)/ -I$(LIBFT_INC_DIR)/ -I$(PRINTF_INC_DIR)/
+INCFLAGS		= -I$(INC_DIR)/
 
 # Bash commands
 RM				= rm -rf
@@ -46,10 +34,7 @@ MKDIR			= mkdir -p
 
 # Dependencies
 OBJ_DEP			= $(addprefix $(OBJ_DIR)/, $(OBJ))
-LIB_DEP			= $(LIBFT_LIB) $(PRINTF_LIB)
-LIBFT_DEP		= $(addprefix $(LIBFT_INC_DIR)/, $(LIBFT_INC))
-PRINTF_DEP		= $(addprefix $(PRINTF_INC_DIR)/, $(PRINTF_INC))
-INC_DEP			= $(addprefix $(INC_DIR)/, $(INC)) $(LIBFT_DEP) $(PRINTF_DEP)
+INC_DEP			= $(addprefix $(INC_DIR)/, $(INC))
 
 # Rules
 all: $(NAME)
@@ -61,21 +46,15 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DEP)
 
 $(NAME): $(OBJ_DEP) $(INC_DEP)
 	@echo "$(BLUE)Building	$(PURPLE)$(NAME)$(NC)"
-	@make --no-print-directory -C $(LIBFT_DIR)
-	@make --no-print-directory -C $(PRINTF_DIR)
-	@$(CC) $(CFLAGS) $(OBJ_DEP) $(LIB_DEP) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ_DEP) -o $(NAME)
 	@echo "$(GREEN)Program $(PURPLE)($(NAME))$(GREEN) has been successfully generated!$(NC)"
 
 clean:
 	@echo "$(RED)Removing	$(PURPLE)$(PROJECT) $(YELLOW)*.o$(NC)"
-	@make clean --no-print-directory -C $(LIBFT_DIR)
-	@make clean --no-print-directory -C $(PRINTF_DIR)
 	@$(RM) $(OBJ_DIR)
 
 fclean: clean
 	@echo "$(RED)Removing	$(PURPLE)$(NAME)$(NC)"
-	@make fclean --no-print-directory -C $(LIBFT_DIR)
-	@make fclean --no-print-directory -C $(PRINTF_DIR)
 	@$(RM) $(NAME)
 
 re: fclean all

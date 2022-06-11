@@ -20,7 +20,7 @@ long long	get_deltatime(long long time)
 /* Get current timestamp from the start in milliseconds */
 long long	get_curtime(t_table tbl)
 {
-	return (get_deltatime(tbl.time0));
+	return (get_deltatime(tbl.start_time));
 }
 
 /* Same as usleep but more precise with big numbers */
