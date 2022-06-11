@@ -2,7 +2,7 @@
 # Use this makefile to compile the project
 
 # Colors constants
-NC				= \033[m
+CLEAR			= \033[m
 RED				= \033[0;31m
 GREEN			= \033[1;32m
 YELLOW			= \033[1;33m
@@ -25,7 +25,7 @@ INC				= $(shell ls $(INC_DIR))
 
 # Compiler options
 CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror -pthread
+CFLAGS			= -Wall -Wextra -Werror -pthread -fsanitize=address -g
 INCFLAGS		= -I$(INC_DIR)/
 
 # Bash commands
@@ -41,20 +41,20 @@ all: $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DEP)
 	@$(MKDIR) $(OBJ_DIR)
-	@echo "$(GREEN)Compiling	$(YELLOW)$(shell basename $<)$(NC)"
+	@echo "$(GREEN)Compiling	$(YELLOW)$(shell basename $<)$(CLEAR)"
 	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ_DEP) $(INC_DEP)
-	@echo "$(BLUE)Building	$(PURPLE)$(NAME)$(NC)"
+	@echo "$(BLUE)Building	$(PURPLE)$(NAME)$(CLEAR)"
 	@$(CC) $(CFLAGS) $(OBJ_DEP) -o $(NAME)
-	@echo "$(GREEN)Program $(PURPLE)($(NAME))$(GREEN) has been successfully generated!$(NC)"
+	@echo "$(GREEN)Program $(PURPLE)($(NAME))$(GREEN) has been successfully generated!$(CLEAR)"
 
 clean:
-	@echo "$(RED)Removing	$(PURPLE)$(PROJECT) $(YELLOW)*.o$(NC)"
+	@echo "$(RED)Removing	$(PURPLE)$(PROJECT) $(YELLOW)*.o$(CLEAR)"
 	@$(RM) $(OBJ_DIR)
 
 fclean: clean
-	@echo "$(RED)Removing	$(PURPLE)$(NAME)$(NC)"
+	@echo "$(RED)Removing	$(PURPLE)$(NAME)$(CLEAR)"
 	@$(RM) $(NAME)
 
 re: fclean all
