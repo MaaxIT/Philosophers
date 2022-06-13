@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 15:16:42 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 15:28:20 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:42:32 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int	philo_loop(t_table *tbl, t_philo *philo, int forkid1, int forkid2)
 	pthread_mutex_lock(&tbl->forks[forkid2]);
 	if (philo->dying)
 		return (-1);
+	philo->last_eat = get_curtime(*tbl);
 	print_philo(tbl, C_YELLOW, "has taken a fork", philo);
 	print_philo(tbl, C_RED, "is eating", philo);
 	ft_usleep(philo, tbl->eat_duration);
-	philo->last_eat = get_curtime(*tbl);
 	if (philo->dying)
 		return (-1);
 	pthread_mutex_unlock(&tbl->forks[forkid1]);
@@ -56,7 +56,7 @@ int	find_dead_philo(t_table *tbl, int i, int *nuked)
 		j = 0;
 		while (j < tbl->max_philos)
 			pthread_mutex_unlock(&tbl->forks[j++]);
-		print_philo(tbl, C_BLUE, "is dead", &tbl->philos[i]);
+		print_philo(tbl, C_BLUE, "died", &tbl->philos[i]);
 		*nuked = 1;
 		return (-1);
 	}
