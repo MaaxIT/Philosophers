@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:32:23 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 16:25:33 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:15:43 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,40 @@ void	check_args_amount(t_table tbl, int argc)
 		error_exit(tbl, EINVAL, "Too much arguments (max 5 args)!");
 }
 
+/* Check args are numbers */
+void	check_args_numbers(t_table tbl, int argc, char **argv)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (i < argc)
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (!(argv[i][j] >= '0' && argv[i][j] <= '9'))
+				error_exit(tbl, EINVAL, "Arguments must be unsigned integers");
+			j++;
+		}
+		i++;
+	}
+}
+
+/* Pre-check all arguments are valid */
+void	check_args(t_table tbl, int argc, char **argv)
+{
+	check_args_amount(tbl, argc);
+	check_args_numbers(tbl, argc, argv);
+}
+
 /* Parse arguments and put it into the structure */
 void	parse_arguments(t_table *tbl, int argc, char **argv)
 {
 	int	num;
 	int	i;
 
-	check_args_amount(*tbl, argc);
+	check_args(*tbl, argc, argv);
 	i = 1;
 	while (i < argc)
 	{
