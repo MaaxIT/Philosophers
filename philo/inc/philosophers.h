@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:52 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 15:11:39 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:28:25 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@
 # define C_PURPLE	"\033[1;35m"
 # define C_CYAN		"\033[1;36m"
 
+/* Shortcut for norminette */
+# define LL_INT long long
+
 /* Our structures */
 typedef struct s_philo {
 	int				id;
@@ -37,7 +40,7 @@ typedef struct s_philo {
 	int				forks;
 	int				dying;
 	int				culpable;
-	long long		last_eat;
+	LL_INT			last_eat;
 	struct s_table	*tbl;
 }	t_philo;
 
@@ -54,20 +57,27 @@ typedef struct s_table {
 	pthread_mutex_t	*write;
 }	t_table;
 
+/* main.c */
+void	print_philo(t_table *tbl, const char *col, const char *m, t_philo *ph);
+
 /* time.c */
-long long	get_curtime(t_table tbl);
-long long	get_time(void);
-void		ft_usleep(t_philo *philo, long long time);
+LL_INT	get_curtime(t_table tbl);
+LL_INT	get_time(void);
+void	ft_usleep(t_philo *philo, LL_INT time);
 
 /* utils.c */
-void		error_exit(t_table tbl, int errcode, const char *msg);
-long long	ft_atoi(const char *str);
+void	error_exit(t_table tbl, int errcode, const char *msg);
+LL_INT	ft_atoi(const char *str);
 
 /* initialization.c */
-void		initialize_philosophers(t_table *tbl);
-void		initialize_table(t_table *tbl);
+void	initialize_philosophers(t_table *tbl);
+void	initialize_table(t_table *tbl);
 
 /* arguments.c */
-void		parse_arguments(t_table *tbl, int argc, char **argv);
+void	parse_arguments(t_table *tbl, int argc, char **argv);
+
+/* philo.c */
+int		philo_loop(t_table *tbl, t_philo *philo, int forkid1, int forkid2);
+int		find_dead_philo(t_table *tbl, int i, int *nuked);
 
 #endif

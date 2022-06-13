@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:42:00 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 14:08:51 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:15:28 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	error_exit(t_table tbl, int errcode, const char *msg)
 		free(tbl.threads);
 	if (tbl.forks)
 		free(tbl.forks);
-
 	if (tbl.forks)
 	{
 		i = 0;
@@ -34,7 +33,6 @@ void	error_exit(t_table tbl, int errcode, const char *msg)
 	}
 	if (tbl.write)
 		pthread_mutex_destroy(tbl.write);
-
 	printf("Error: %s\n", msg);
 	exit(errcode);
 }

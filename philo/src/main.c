@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:17 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 15:13:26 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:32:26 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,14 @@
 */
 
 /* Just a function to print with timestamp */
-void	print_philo(t_table *tbl, const char *col, const char *msg, t_philo *ph)
+void	print_philo(t_table *tbl, const char *col, const char *m, t_philo *ph)
 {
 	if (ph->dying && !ph->culpable)
 		return ;
 	pthread_mutex_lock(tbl->write);
 	if (!(ph->dying && !ph->culpable))
-		printf("%04lld %s%d %s%s\n", get_curtime(*tbl), col, ph->id + 1, msg, C_CLEAR);
+		printf("%04lld %s%d %s%s\n", get_curtime(*tbl), col, \
+		ph->id + 1, m, C_CLEAR);
 	pthread_mutex_unlock(tbl->write);
 }
 
@@ -47,30 +48,8 @@ void	*philo_routine(void *args)
 	i = 0;
 	while (1)
 	{
-		if (philo->dying)
+		if (philo_loop(tbl, philo, forkid1, forkid2) == -1)
 			break ;
-		pthread_mutex_lock(&tbl->forks[forkid1]);
-		if (philo->dying)
-			break ;
-		print_philo(tbl, C_YELLOW, "has taken a fork", philo);
-		pthread_mutex_lock(&tbl->forks[forkid2]);
-		if (philo->dying)
-			break ;
-		print_philo(tbl, C_YELLOW, "has taken a fork", philo);
-		print_philo(tbl, C_RED, "is eating", philo);
-		ft_usleep(philo, tbl->eat_duration);
-		philo->last_eat = get_curtime(*tbl);
-		if (philo->dying)
-			break ;
-		pthread_mutex_unlock(&tbl->forks[forkid1]);
-		pthread_mutex_unlock(&tbl->forks[forkid2]);
-		if (philo->dying)
-			break ;
-		print_philo(tbl, C_CYAN, "is sleeping", philo);
-		ft_usleep(philo, tbl->sleep_duration);
-		if (philo->dying)
-			break ;
-		print_philo(tbl, C_PURPLE, "is thinking", philo);
 		i++;
 	}
 	return (NULL);
@@ -82,7 +61,6 @@ void	*die_routine(void *tblptr)
 	t_table	*tbl;
 	int		nuked;
 	int		i;
-	int		j;
 
 	tbl = (t_table *)tblptr;
 	while (1)
@@ -91,19 +69,8 @@ void	*die_routine(void *tblptr)
 		i = 0;
 		while (i < tbl->max_philos)
 		{
-			if (get_curtime(*tbl) - tbl->philos[i].last_eat > tbl->die_cooldown)
-			{
-				j = 0;
-				while (j < tbl->max_philos)
-					tbl->philos[j++].dying = 1;
-				tbl->philos[i].culpable = 1;
-				j = 0;
-				while (j < tbl->max_philos)
-					pthread_mutex_unlock(&tbl->forks[j++]);
-				print_philo(tbl, C_BLUE, "is dead", &tbl->philos[i]);
-				nuked = 1;
+			if (find_dead_philo(tbl, i, &nuked) == -1)
 				break ;
-			}
 			i++;
 		}
 		if (nuked)
@@ -113,6 +80,17 @@ void	*die_routine(void *tblptr)
 	return (NULL);
 }
 
+/* A simple function to initialize all values of the game */
+void	init_everything(t_table *tbl, pthread_mutex_t *wr, int c, char **v)
+{
+	initialize_table(tbl);
+	parse_arguments(tbl, c, v);
+	initialize_philosophers(tbl);
+	pthread_mutex_init(wr, NULL);
+	tbl->write = wr;
+}
+
+/* The main function */
 int	main(int argc, char *argv[])
 {
 	pthread_t		die_manager;
@@ -120,11 +98,7 @@ int	main(int argc, char *argv[])
 	t_table			tbl;
 	int				i;
 
-	initialize_table(&tbl);
-	parse_arguments(&tbl, argc, argv);
-	initialize_philosophers(&tbl);
-	pthread_mutex_init(&write_manager, NULL);
-	tbl.write = &write_manager;
+	init_everything(&tbl, &write_manager, argc, argv);
 	pthread_create(&die_manager, NULL, &die_routine, (void *)&tbl);
 	i = 0;
 	while (i < tbl.max_philos)
