@@ -6,14 +6,14 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:32:23 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 17:15:43 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 20:04:36 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
 /* Check for the good amount of arguments */
-void	check_args_amount(t_table tbl, int argc)
+void	check_args_amount(t_table *tbl, int argc)
 {
 	if (argc < 5)
 		error_exit(tbl, EINVAL, "Missing arguments (min 4 args)!");
@@ -22,7 +22,7 @@ void	check_args_amount(t_table tbl, int argc)
 }
 
 /* Check args are numbers */
-void	check_args_numbers(t_table tbl, int argc, char **argv)
+void	check_args_numbers(t_table *tbl, int argc, char **argv)
 {
 	int	i;
 	int	j;
@@ -42,7 +42,7 @@ void	check_args_numbers(t_table tbl, int argc, char **argv)
 }
 
 /* Pre-check all arguments are valid */
-void	check_args(t_table tbl, int argc, char **argv)
+void	check_args(t_table *tbl, int argc, char **argv)
 {
 	check_args_amount(tbl, argc);
 	check_args_numbers(tbl, argc, argv);
@@ -54,17 +54,17 @@ void	parse_arguments(t_table *tbl, int argc, char **argv)
 	int	num;
 	int	i;
 
-	check_args(*tbl, argc, argv);
+	check_args(tbl, argc, argv);
 	i = 1;
 	while (i < argc)
 	{
 		num = ft_atoi(argv[i]);
 		if (num < 0)
-			return (error_exit(*tbl, EINVAL, "Args must be positive!"));
+			return (error_exit(tbl, EINVAL, "Args must be positive!"));
 		if (i == 1)
 		{
 			if (num == 0)
-				return (error_exit(*tbl, EINVAL, "Philos count must be >1!"));
+				return (error_exit(tbl, EINVAL, "Philos count must be >1!"));
 			tbl->max_philos = num;
 		}
 		if (i == 2)

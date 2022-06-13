@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:52 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 17:34:53 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 20:05:01 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ LL_INT	get_time(void);
 void	ft_usleep(t_philo *philo, LL_INT time);
 
 /* utils.c */
-void	error_exit(t_table tbl, int errcode, const char *msg);
+void	free_exit(t_table *tbl);
+void	error_exit(t_table *tbl, int errcode, const char *msg);
 LL_INT	ft_atoi(const char *str);
 
 /* initialization.c */

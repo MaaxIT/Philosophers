@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:33:57 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 17:34:44 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 20:04:10 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	initialize_threads(t_table *tbl)
 
 	threads = malloc(sizeof(pthread_t) * tbl->max_philos);
 	if (!threads)
-		error_exit(*tbl, ENOMEM, "Cannot allocate threads array!");
+		error_exit(tbl, ENOMEM, "Cannot allocate threads array!");
 	tbl->threads = threads;
 }
 
@@ -46,7 +46,7 @@ void	initialize_forks(t_table *tbl)
 
 	forks = malloc(sizeof(pthread_mutex_t) * tbl->max_philos);
 	if (!forks)
-		error_exit(*tbl, ENOMEM, "Cannot allocate mutexes array!");
+		error_exit(tbl, ENOMEM, "Cannot allocate mutexes array!");
 	i = 0;
 	while (i < tbl->max_philos)
 	{
@@ -77,7 +77,7 @@ void	initialize_philosophers(t_table *tbl)
 
 	philos = malloc(sizeof(t_philo) * tbl->max_philos);
 	if (!philos)
-		error_exit(*tbl, ENOMEM, "Cannot allocate philosophers!");
+		error_exit(tbl, ENOMEM, "Cannot allocate philosophers!");
 	i = 0;
 	while (i < tbl->max_philos)
 	{

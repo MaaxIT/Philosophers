@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:17 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 17:06:49 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 20:05:21 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,6 @@ int	main(int argc, char *argv[])
 	i = 0;
 	while (i < tbl.max_philos)
 		pthread_join(tbl.threads[i++], NULL);
-	i = 0;
-	while (i < tbl.max_philos)
-		pthread_mutex_destroy(&tbl.forks[i++]);
-	pthread_mutex_destroy(&write_manager);
+	free_exit(&tbl);
 	return (0);
 }
