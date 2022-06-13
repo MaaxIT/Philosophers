@@ -6,13 +6,11 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:42:00 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 15:15:28 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:11:47 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-/* Clear all existing mutexes */
 
 /* Exit and return a custom error message */
 void	error_exit(t_table tbl, int errcode, const char *msg)
