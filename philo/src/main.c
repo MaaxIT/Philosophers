@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:17 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 15:32:26 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:28:38 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	print_philo(t_table *tbl, const char *col, const char *m, t_philo *ph)
 		return ;
 	pthread_mutex_lock(tbl->write);
 	if (!(ph->dying && !ph->culpable))
-		printf("%04lld %s%d %s%s\n", get_curtime(*tbl), col, \
+		printf("%04lld %s%d %s%s\n", get_curtime(*tbl), col, 
 		ph->id + 1, m, C_CLEAR);
 	pthread_mutex_unlock(tbl->write);
 }

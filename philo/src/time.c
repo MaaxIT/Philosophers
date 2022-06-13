@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:24 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 15:15:30 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:53:31 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ void	ft_usleep(t_philo *philo, long long time)
 	{
 		if (philo->dying)
 			break ;
-		usleep(10);
+		usleep(500);
 	}
 }
