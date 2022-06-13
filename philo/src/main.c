@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:17 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/11 20:52:59 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:13:26 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,14 @@
 */
 
 /* Just a function to print with timestamp */
-void	print_philo(t_table tbl, const char *col, const char *msg, int philoid)
+void	print_philo(t_table *tbl, const char *col, const char *msg, t_philo *ph)
 {
-	printf("%04lld %s%d %s%s\n", get_curtime(tbl), col, philoid + 1, \
-	msg, C_CLEAR);
+	if (ph->dying && !ph->culpable)
+		return ;
+	pthread_mutex_lock(tbl->write);
+	if (!(ph->dying && !ph->culpable))
+		printf("%04lld %s%d %s%s\n", get_curtime(*tbl), col, ph->id + 1, msg, C_CLEAR);
+	pthread_mutex_unlock(tbl->write);
 }
 
 /* Routine for a philosopher */
@@ -48,12 +52,12 @@ void	*philo_routine(void *args)
 		pthread_mutex_lock(&tbl->forks[forkid1]);
 		if (philo->dying)
 			break ;
-		print_philo(*tbl, C_YELLOW, "has taken a fork", philo->id);
+		print_philo(tbl, C_YELLOW, "has taken a fork", philo);
 		pthread_mutex_lock(&tbl->forks[forkid2]);
 		if (philo->dying)
 			break ;
-		print_philo(*tbl, C_YELLOW, "has taken a fork", philo->id);
-		print_philo(*tbl, C_RED, "is eating", philo->id);
+		print_philo(tbl, C_YELLOW, "has taken a fork", philo);
+		print_philo(tbl, C_RED, "is eating", philo);
 		ft_usleep(philo, tbl->eat_duration);
 		philo->last_eat = get_curtime(*tbl);
 		if (philo->dying)
@@ -62,11 +66,11 @@ void	*philo_routine(void *args)
 		pthread_mutex_unlock(&tbl->forks[forkid2]);
 		if (philo->dying)
 			break ;
-		print_philo(*tbl, C_CYAN, "is sleeping", philo->id);
+		print_philo(tbl, C_CYAN, "is sleeping", philo);
 		ft_usleep(philo, tbl->sleep_duration);
 		if (philo->dying)
 			break ;
-		print_philo(*tbl, C_PURPLE, "is thinking", philo->id);
+		print_philo(tbl, C_PURPLE, "is thinking", philo);
 		i++;
 	}
 	return (NULL);
@@ -92,10 +96,11 @@ void	*die_routine(void *tblptr)
 				j = 0;
 				while (j < tbl->max_philos)
 					tbl->philos[j++].dying = 1;
+				tbl->philos[i].culpable = 1;
 				j = 0;
 				while (j < tbl->max_philos)
 					pthread_mutex_unlock(&tbl->forks[j++]);
-				print_philo(*tbl, C_BLUE, "is dead", tbl->philos[i].id);
+				print_philo(tbl, C_BLUE, "is dead", &tbl->philos[i]);
 				nuked = 1;
 				break ;
 			}
@@ -110,13 +115,16 @@ void	*die_routine(void *tblptr)
 
 int	main(int argc, char *argv[])
 {
-	pthread_t	die_manager;
-	t_table		tbl;
-	int			i;
+	pthread_t		die_manager;
+	pthread_mutex_t	write_manager;
+	t_table			tbl;
+	int				i;
 
 	initialize_table(&tbl);
 	parse_arguments(&tbl, argc, argv);
 	initialize_philosophers(&tbl);
+	pthread_mutex_init(&write_manager, NULL);
+	tbl.write = &write_manager;
 	pthread_create(&die_manager, NULL, &die_routine, (void *)&tbl);
 	i = 0;
 	while (i < tbl.max_philos)
@@ -133,5 +141,6 @@ int	main(int argc, char *argv[])
 	i = 0;
 	while (i < tbl.max_philos)
 		pthread_mutex_destroy(&tbl.forks[i++]);
+	pthread_mutex_destroy(&write_manager);
 	return (0);
 }

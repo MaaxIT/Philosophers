@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:24 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/11 20:53:20 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:51:12 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	ft_usleep(t_philo *philo, long long time)
 {
 	long long	start;
 
-	philo = (t_philo *)philo;
 	start = get_time();
 	while (get_time() < start + time)
 	{

@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:33:57 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/11 20:43:18 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:11:52 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	initialize_table(t_table *tbl)
 	tbl->philos = NULL;
 	tbl->threads = NULL;
 	tbl->forks = NULL;
+	tbl->write = NULL;
 }
 
 /* Initialize our threads depending on the philosophers amount */
@@ -63,6 +64,7 @@ void	initialize_philo(t_table *tbl, t_philo *philo, int id)
 	philo->forks = 0;
 	philo->dying = 0;
 	philo->last_eat = 0;
+	philo->culpable = 0;
 	philo->tbl = tbl;
 }
 

@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:52 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/11 20:45:08 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:11:39 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 # include <stdlib.h>
 
 /* Colors */
-# define C_CLEAR		"\033[m"
+# define C_CLEAR	"\033[m"
 # define C_RED		"\033[0;31m"
-# define C_GREEN		"\033[1;32m"
+# define C_GREEN	"\033[1;32m"
 # define C_YELLOW	"\033[1;33m"
 # define C_BLUE		"\033[0;34m"
 # define C_PURPLE	"\033[1;35m"
@@ -36,6 +36,7 @@ typedef struct s_philo {
 	int				activity;
 	int				forks;
 	int				dying;
+	int				culpable;
 	long long		last_eat;
 	struct s_table	*tbl;
 }	t_philo;
@@ -50,6 +51,7 @@ typedef struct s_table {
 	t_philo			*philos;
 	pthread_t		*threads;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	*write;
 }	t_table;
 
 /* time.c */

@@ -25,7 +25,7 @@ INC				= $(shell ls $(INC_DIR))
 
 # Compiler options
 CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror -pthread -fsanitize=address -g
+CFLAGS			= -Wall -Wextra -Werror -pthread
 INCFLAGS		= -I$(INC_DIR)/
 
 # Bash commands

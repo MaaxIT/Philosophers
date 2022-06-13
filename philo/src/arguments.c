@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:32:23 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/11 20:42:26 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:46:00 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 /* Check for the good amount of arguments */
 void	check_args_amount(t_table tbl, int argc)
 {
-	if (argc < 4)
+	if (argc < 5)
 		error_exit(tbl, EINVAL, "Missing arguments (min 4 args)!");
-	if (argc > 5)
+	if (argc > 6)
 		error_exit(tbl, EINVAL, "Too much arguments (max 5 args)!");
 }
 
