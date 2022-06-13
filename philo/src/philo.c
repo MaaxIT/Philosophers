@@ -6,11 +6,18 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 15:16:42 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 16:42:32 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:49:44 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+/* Fork + eating (just to bypass a line of norminette) */
+void	fork_and_eat(t_table *tbl, t_philo *philo)
+{
+	print_philo(tbl, C_YELLOW, "has taken a fork", philo);
+	print_philo(tbl, C_RED, "is eating", philo);
+}
 
 /* Loop that will be called in every philo routine */
 int	philo_loop(t_table *tbl, t_philo *philo, int forkid1, int forkid2)
@@ -25,9 +32,9 @@ int	philo_loop(t_table *tbl, t_philo *philo, int forkid1, int forkid2)
 	if (philo->dying)
 		return (-1);
 	philo->last_eat = get_curtime(*tbl);
-	print_philo(tbl, C_YELLOW, "has taken a fork", philo);
-	print_philo(tbl, C_RED, "is eating", philo);
+	fork_and_eat(tbl, philo);
 	ft_usleep(philo, tbl->eat_duration);
+	philo->eat_count++;
 	if (philo->dying)
 		return (-1);
 	pthread_mutex_unlock(&tbl->forks[forkid1]);
@@ -42,12 +49,35 @@ int	philo_loop(t_table *tbl, t_philo *philo, int forkid1, int forkid2)
 	return (0);
 }
 
+/* Check if all philos has eaten */
+int	has_finished_eating(t_table *tbl)
+{
+	int	i;
+	int	count;
+
+	if (tbl->eat_count < 0)
+		return (0);
+	i = 0;
+	count = 0;
+	while (i < tbl->max_philos)
+	{
+		if (tbl->philos[i].eat_count >= tbl->eat_count)
+			count++;
+		i++;
+	}
+	return (count == tbl->max_philos);
+}
+
 /* Check for a dead philosopher in the die routine */
 int	find_dead_philo(t_table *tbl, int i, int *nuked)
 {
 	int	j;
+	int	finish_eat;
+	int	dying_cld;
 
-	if (get_curtime(*tbl) - tbl->philos[i].last_eat > tbl->die_cooldown)
+	finish_eat = has_finished_eating(tbl);
+	dying_cld = get_curtime(*tbl) - tbl->philos[i].last_eat;
+	if (finish_eat || dying_cld > tbl->die_cooldown)
 	{
 		j = 0;
 		while (j < tbl->max_philos)
@@ -56,7 +86,8 @@ int	find_dead_philo(t_table *tbl, int i, int *nuked)
 		j = 0;
 		while (j < tbl->max_philos)
 			pthread_mutex_unlock(&tbl->forks[j++]);
-		print_philo(tbl, C_BLUE, "died", &tbl->philos[i]);
+		if (!finish_eat)
+			print_philo(tbl, C_BLUE, "died", &tbl->philos[i]);
 		*nuked = 1;
 		return (-1);
 	}

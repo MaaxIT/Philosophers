@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 20:38:52 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 15:28:25 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:34:53 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_philo {
 	int				forks;
 	int				dying;
 	int				culpable;
+	int				eat_count;
 	LL_INT			last_eat;
 	struct s_table	*tbl;
 }	t_philo;

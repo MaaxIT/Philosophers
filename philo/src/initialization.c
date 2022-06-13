@@ -6,7 +6,7 @@
 /*   By: mpeharpr <mpeharpr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:33:57 by mpeharpr          #+#    #+#             */
-/*   Updated: 2022/06/13 15:11:52 by mpeharpr         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:34:44 by mpeharpr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	initialize_philo(t_table *tbl, t_philo *philo, int id)
 	philo->activity = 0;
 	philo->forks = 0;
 	philo->dying = 0;
+	philo->eat_count = 0;
 	philo->last_eat = 0;
 	philo->culpable = 0;
 	philo->tbl = tbl;
